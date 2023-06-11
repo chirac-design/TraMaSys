@@ -1,0 +1,67 @@
+﻿@model SysMaTra.Models.Bus
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<div class="bg-gradient-primary">
+    <div class="container ">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    @*<img class="col-lg-5 d-none d-lg-block bg-register-image" src="img/bg_img.png "/>*@
+                    <div class="col-lg-12">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Ajouter une Bus!</h1>
+                            </div>
+                            <form id="address-form" class="user" asp-action="Create">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="Id" />
+                                <div class="form-group">
+                                    <label asp-for="Matricule" class="control-label"></label>
+                                    <input asp-for="Matricule" class="form-control" />
+                                    <span asp-validation-for="Matricule" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="PlaceNum" class="control-label"></label>
+                                    <input asp-for="PlaceNum" class="form-control" />
+                                    <span asp-validation-for="PlaceNum" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Classe" class="control-label"></label>
+                                    <input asp-for="Classe" class="form-control" />
+                                    <span asp-validation-for="Classe" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Statut" class="control-label"></label>
+                                    <input asp-for="Statut" class="form-control" />
+                                    <span asp-validation-for="Statut" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Created" class="control-label"></label>
+                                    <input asp-for="Created" class="form-control" />
+                                    <span asp-validation-for="Created" class="text-danger"></span>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="submit" value="Create" class="btn btn-primary form-control" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a class="btn btn-danger form-control" asp-action="Index">Retour</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

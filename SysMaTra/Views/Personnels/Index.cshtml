@@ -1,0 +1,113 @@
+﻿@model IEnumerable<SysMaTra.Models.Personnel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_Admin";
+}
+<div class="container-fluid content-list">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4 text-gray-900 card-body">
+        <h1 class="h3 mb-0 text-gray-800">Adresses</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+        </a>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <span><a class="btn btn-primary" id="add-address" asp-action="Create">Ajouter</a></span>
+        </div>
+        <div id="dialog-address" title="Ajouter une Adresse"></div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Nom)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Prenom)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Fonction)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Adresse)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Statut)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </th>
+                            <th>Fonctions</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Nom)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Prenom)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Fonction)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Adresse)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Statut)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </th>
+                            <th>Fonctions</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Nom)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Prenom)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Fonction)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Adresse.Domicile)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Statut)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Created)
+                                </td>
+                                <td>
+                                    <a title="Modifier" asp-action="Edit" asp-route-id="@item.Id"><span class="fa fa-edit"></span></a>
+                                    <a title="Details" asp-action="Details" asp-route-id="@item.Id"><span class="fa fa-book-open"></span></a>
+                                    <a title="Supprimer" asp-action="Delete" asp-route-id="@item.Id"><span class="btn btn-danger fa fa-close"></span></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

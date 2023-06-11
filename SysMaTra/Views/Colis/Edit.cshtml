@@ -1,0 +1,101 @@
+﻿@model SysMaTra.Models.Colis
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<div class="bg-gradient-primary">
+    <div class="container ">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    @*<img class="col-lg-5 d-none d-lg-block bg-register-image" src="img/bg_img.png "/>*@
+                    <div class="col-lg-12">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Ajouter une Adresse!</h1>
+                            </div>
+                            <form id="address-form" class="user" asp-action="Create">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="Id" />
+                                <div class="form-group">
+                                    <label asp-for="Valeur" class="control-label"></label>
+                                    <input asp-for="Valeur" class="form-control" />
+                                    <span asp-validation-for="Valeur" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Description" class="control-label"></label>
+                                    <textarea asp-for="Description" class="form-control"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Image" class="control-label"></label>
+                                    <input asp-for="Image" type="file" class="form-control" />
+                                    <span asp-validation-for="Image" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="DestinationId" class="control-label"></label>
+                                    <select asp-for="DestinationId" class="form-control" asp-items="ViewBag.DestinationId"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Destinateur" class="control-label"></label>
+                                    <input asp-for="Destinateur" class="form-control" />
+                                    <span asp-validation-for="Destinateur" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="DestinateurPhone" class="control-label"></label>
+                                    <input asp-for="DestinateurPhone" class="form-control" />
+                                    <span asp-validation-for="DestinateurPhone" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Destinatire" class="control-label"></label>
+                                    <input asp-for="Destinatire" class="form-control" />
+                                    <span asp-validation-for="Destinatire" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="DestinatairePhone" class="control-label"></label>
+                                    <input asp-for="DestinatairePhone" class="form-control" />
+                                    <span asp-validation-for="DestinatairePhone" class="text-danger"></span>
+                                </div>
+                                <div class="form-group form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" asp-for="IsPaye" /> @Html.DisplayNameFor(model => model.IsPaye)
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Statut" class="control-label"></label>
+                                    <input asp-for="Statut" class="form-control" />
+                                    <span asp-validation-for="Statut" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Date" class="control-label"></label>
+                                    <input asp-for="Date" class="form-control" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Created" class="control-label"></label>
+                                    <input asp-for="Created" class="form-control" />
+                                    <span asp-validation-for="Created" class="text-danger"></span>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="submit" value="Create" class="btn btn-primary form-control" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a class="btn btn-danger form-control" asp-action="Index">Retour</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
