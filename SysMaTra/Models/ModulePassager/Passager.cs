@@ -16,7 +16,7 @@ namespace SysMaTra.Models
         [Display(Name = "Prenom")]
         public string Prenom { get; set; }
 
-        [Required]
+        //[Required]
         [DataType(DataType.Upload)]
         [Display(Name = "ImageCNI")]
         public string ImageCNI { get; set; } // image de type file

@@ -8,7 +8,7 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4 text-gray-900 card-body">
-        <h1 class="h3 mb-0 text-gray-800">Adresses</h1>
+        <h1 class="h3 mb-0 text-gray-800">Destination</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
         </a>
@@ -29,9 +29,9 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Description)
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Logo)
-                            </th>
+                            @*            <th>
+                            @Html.DisplayNameFor(model => model.Logo)
+                            </th>*@
                             <th>
                                 @Html.DisplayNameFor(model => model.Trajet)
                             </th>
@@ -46,9 +46,9 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Description)
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Logo)
-                            </th>
+                            @*            <th>
+                            @Html.DisplayNameFor(model => model.Logo)
+                            </th>*@
                             <th>
                                 @Html.DisplayNameFor(model => model.Trajet)
                             </th>
@@ -65,9 +65,9 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Description)
                                 </td>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Logo)
-                                </th>
+                                @*            <td>
+                            @Html.DisplayFor(modelItem => item.Logo)
+                            </td>*@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Trajet.Nom)
                                 </td>

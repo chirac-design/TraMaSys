@@ -557,7 +557,6 @@ namespace SysMaTra.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageCNI")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsPaye")
@@ -697,7 +696,6 @@ namespace SysMaTra.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<double>("Tarif")
-                        .HasMaxLength(100)
                         .HasColumnType("float");
 
                     b.HasKey("Id");

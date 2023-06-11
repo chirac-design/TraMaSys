@@ -195,6 +195,7 @@ namespace SysMaTra.Controllers
             }
             return $"/uploads/Images/{fileName}";
         }
+
         private bool PassagerExists(int id)
         {
           return _context.Passager.Any(e => e.Id == id);

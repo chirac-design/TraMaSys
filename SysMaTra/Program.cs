@@ -21,9 +21,10 @@ builder.Services.ConfigureApplicationCookie(config =>
     config.LoginPath = "/Login";
     //config.LoginPath = _configuration["Application:LoginPath"];
 });
-builder.Services.AddMvc().AddRazorPagesOptions(Options => Options.AllowAreas = true);
+//builder.Services.AddMvc().AddRazorPagesOptions(Options => Options.AllowAreas = true);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<HttpClientHandler>();
 
 var app = builder.Build();
 

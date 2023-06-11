@@ -73,7 +73,7 @@ namespace SysMaTra.Controllers
 
             using (var httpClient = new HttpClient(_ClientHandler))
             {
-                using (var response = await httpClient.GetAsync("http://localhost:5070/api/Trajets!" + id))
+                using (var response = await httpClient.GetAsync("http://localhost:5070/api/Trajets/" + trajet.Id))
                 {
                     string ApiResponse = await response.Content.ReadAsStringAsync();
                     trajet = JsonConvert.DeserializeObject<Trajet>(ApiResponse);
@@ -135,7 +135,7 @@ namespace SysMaTra.Controllers
 
             using (var httpClient = new HttpClient(_ClientHandler))
             {
-                using (var response = await httpClient.GetAsync("http://localhost:5070/api/Trajets!" + id))
+                using (var response = await httpClient.GetAsync("http://localhost:5070/api/Trajets/" + trajet.Id))
                 {
                     string ApiResponse = await response.Content.ReadAsStringAsync();
                     trajet = JsonConvert.DeserializeObject<Trajet>(ApiResponse);
@@ -162,7 +162,7 @@ namespace SysMaTra.Controllers
                 {
                     StringContent Content = new StringContent(JsonConvert.SerializeObject(trajet), Encoding.UTF8, "application/json");
 
-                    using (var response = await httpClient.PostAsync("http://localhost:5070/api/Trajets/" + id, Content))
+                    using (var response = await httpClient.PostAsync("http://localhost:5070/api/Trajets/" + trajet.Id, Content))
                     {
                         string ApiResponse = await response.Content.ReadAsStringAsync();
                         trajet = JsonConvert.DeserializeObject<Trajet>(ApiResponse);
@@ -185,7 +185,7 @@ namespace SysMaTra.Controllers
 
             using (var httpClient = new HttpClient(_ClientHandler))
             {
-                using (var response = await httpClient.GetAsync("http://localhost:5070/api/Trajets!" + id))
+                using (var response = await httpClient.GetAsync("http://localhost:5070/api/Trajets/" + trajet.Id))
                 {
                     string ApiResponse = await response.Content.ReadAsStringAsync();
                     trajet = JsonConvert.DeserializeObject<Trajet>(ApiResponse);
@@ -206,7 +206,7 @@ namespace SysMaTra.Controllers
             string message = " ";
             using (var httpClient = new HttpClient(_ClientHandler))
             {
-                using (var response = await httpClient.DeleteAsync("http://localhost:5070/api/Adresses/" + id))
+                using (var response = await httpClient.DeleteAsync("http://localhost:5070/api/Adresses/" + trajet.Id))
                 {
                     message = await response.Content.ReadAsStringAsync();
                 }

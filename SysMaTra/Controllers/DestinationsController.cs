@@ -1,63 +1,78 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SysMaTra.Models;
-using SysMaTra.Models.ApiServices;
 
 namespace SysMaTra.Controllers
 {
     public class DestinationsController : Controller
     {
         private readonly SysMaTraContext _context;
-        VoyageApi _api = new VoyageApi();
         HttpClientHandler _ClientHandler = new HttpClientHandler();
-        private readonly IWebHostEnvironment _hostingEnvironment;
+        Destination destination = new Destination();
+        List<Destination> destinations = new List<Destination>();
 
-        public DestinationsController(SysMaTraContext context, IWebHostEnvironment hostingEnvironment)
+        public DestinationsController(SysMaTraContext context,HttpClientHandler _ClientHandler)
         {
             _context = context;
-            _hostingEnvironment = hostingEnvironment;
             _ClientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, SslPolicyErrors) => { return true; };
         }
-
 
         // GET: Destinations
         public async Task<IActionResult> Index()
         {
-            List<Destination> Destinations = new List<Destination>();
-            HttpClient Client = _api.Initial();
-            HttpResponseMessage res = await Client.GetAsync("/Destinations");
-            if (res.IsSuccessStatusCode)
-            {
-                var results = res.Content.ReadAsStringAsync().Result;
-                Destinations = JsonConvert.DeserializeObject<List<Destination>>(results);
-            }
+            destinations = new List<Destination>();
 
-            return View(Destinations);
+            using (var httpClient = new HttpClient(_ClientHandler))
+            {
+                using (var response = await httpClient.GetAsync("http://localhost:5070/api/Destinations"))
+                {
+                    string ApiResponse = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("Réponse de l'API : " + ApiResponse);
+                    destinations = JsonConvert.DeserializeObject<List<Destination>>(ApiResponse);
+                    Debug.WriteLine("Liste des Destinations : " + JsonConvert.SerializeObject(destinations));
+                }
+            }
+            return View(destinations);
+
         }
 
         // GET: Destinations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            Destination destination = new Destination();
-            HttpClient Client = _api.Initial();
-            HttpResponseMessage res = await Client.GetAsync("/Destination" + destination.Id);
-            if (res.IsSuccessStatusCode)
+            if (id == null || _context.Destination == null)
             {
-                var results = res.Content.ReadAsStringAsync().Result;
-                destination = JsonConvert.DeserializeObject<Destination>(results);
+                return NotFound();
+            }
+
+            destination = new Destination();
+
+            using (var httpClient = new HttpClient(_ClientHandler))
+            {
+                using (var response = await httpClient.GetAsync("http://localhost:5070/api/Destinations/" + destination.Id))
+                {
+                    string ApiResponse = await response.Content.ReadAsStringAsync();
+                    destination = JsonConvert.DeserializeObject<Destination>(ApiResponse);
+                }
             }
             return View(destination);
         }
 
         // GET: Destinations/Create
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> CreateAsync()
         {
             var trajetsController = new TrajetsController(_context, _ClientHandler);
             List<Trajet> trajet = await trajetsController.GetTrajets();
             ViewData["TrajetId"] = new SelectList(trajet, "Id", "Nom");
             return View();
+
         }
 
         // POST: Destinations/Create
@@ -65,51 +80,45 @@ namespace SysMaTra.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nom,Description,TrajetId")] Destination destination, IFormFile Logo)
+        public async Task<IActionResult> Create([Bind("Id,Nom,Description,Logo,TrajetId")] Destination destination)
         {
-            if (Logo is null || Logo.Length == 0)
+            if (ModelState.IsValid)
             {
-                destination.Logo = "60111.jpg";
-                return BadRequest("fichier introuvable");
-            }
+                using (var httpClient = new HttpClient(_ClientHandler))
+                {
+                    StringContent Content = new StringContent(JsonConvert.SerializeObject(destination), Encoding.UTF8, "application/json");
 
-            destination.Logo = await SaveFileAsync(Logo);
-            HttpClient Client = _api.Initial();
-            string data = JsonConvert.SerializeObject(destination);
-
-            StringContent content = new StringContent(data, Encoding.UTF8, "Application/JSon");
-
-            HttpResponseMessage res = Client.PostAsync("/Destinations", content).Result;
-
-            if (res.IsSuccessStatusCode)
-
-            {
-
+                    using (var response = await httpClient.PostAsync("http://localhost:5070/api/Destnations", Content))
+                    {
+                        string ApiResponse = await response.Content.ReadAsStringAsync();
+                        destination = JsonConvert.DeserializeObject<Destination>(ApiResponse);
+                    }
+                }
                 return RedirectToAction(nameof(Index));
-
             }
-
-            // Récupération des données depuis l'action GetTrajets du TrajetsController
             var trajetsController = new TrajetsController(_context, _ClientHandler);
             List<Trajet> trajet = await trajetsController.GetTrajets();
-
-            // Peuplement de la SelectList
             ViewData["TrajetId"] = new SelectList(trajet, "Id", "Nom", destination.TrajetId);
-
             return View(destination);
-
         }
 
         // GET: Destinations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            Destination destination = new Destination();
-            HttpClient Client = _api.Initial();
-            HttpResponseMessage res = await Client.GetAsync("/Destinations" + destination.Id);
-            if (res.IsSuccessStatusCode)
+            if (id == null || _context.Destination == null)
             {
-                var results = res.Content.ReadAsStringAsync().Result;
-                destination = JsonConvert.DeserializeObject<Destination>(results);
+                return NotFound();
+            }
+
+            destination = new Destination();
+
+            using (var httpClient = new HttpClient(_ClientHandler))
+            {
+                using (var response = await httpClient.GetAsync("http://localhost:5070/api/Destnations/" + destination.Id))
+                {
+                    string ApiResponse = await response.Content.ReadAsStringAsync();
+                    destination = JsonConvert.DeserializeObject<Destination>(ApiResponse);
+                }
             }
             var trajetsController = new TrajetsController(_context, _ClientHandler);
             List<Trajet> trajet = await trajetsController.GetTrajets();
@@ -122,7 +131,7 @@ namespace SysMaTra.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nom,Description,TrajetId")] Destination destination, IFormFile Logo)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nom,Description,Logo,TrajetId")] Destination destination)
         {
             if (id != destination.Id)
             {
@@ -131,24 +140,31 @@ namespace SysMaTra.Controllers
 
             if (ModelState.IsValid)
             {
-                if (Logo is null || Logo.Length == 0)
+                try
                 {
-                    destination.Logo = "60111.jpg";
-                    return BadRequest("fichier introuvable");
+                    using (var httpClient = new HttpClient(_ClientHandler))
+                    {
+                        StringContent Content = new StringContent(JsonConvert.SerializeObject(destination), Encoding.UTF8, "application/json");
+
+                        using (var response = await httpClient.PostAsync("http://localhost:5070/api/Destinations/" + destination.Id, Content))
+                        {
+                            string ApiResponse = await response.Content.ReadAsStringAsync();
+                            destination = JsonConvert.DeserializeObject<Destination>(ApiResponse);
+                        }
+                    }
                 }
-
-                destination.Logo = await SaveFileAsync(Logo);
-                HttpClient Client = _api.Initial();
-                string data = JsonConvert.SerializeObject(destination);
-
-                StringContent content = new StringContent(data, Encoding.UTF8, "Application/JSon");
-
-                HttpResponseMessage res = Client.PutAsync("/Destinations" + destination.Id, content).Result;
-
-                if (res.IsSuccessStatusCode)
+                catch (DbUpdateConcurrencyException)
                 {
-                    return RedirectToAction(nameof(Index));
+                    if (!DestinationExists(destination.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToAction(nameof(Index));
             }
             var trajetsController = new TrajetsController(_context, _ClientHandler);
             List<Trajet> trajet = await trajetsController.GetTrajets();
@@ -164,15 +180,16 @@ namespace SysMaTra.Controllers
                 return NotFound();
             }
 
-            Destination destination = new Destination();
-            HttpClient Client = _api.Initial();
-            HttpResponseMessage res = await Client.GetAsync("/Destinations" + destination.Id);
-            if (res.IsSuccessStatusCode)
-            {
-                var results = res.Content.ReadAsStringAsync().Result;
-                destination = JsonConvert.DeserializeObject<Destination>(results);
-            }
+            destination = new Destination();
 
+            using (var httpClient = new HttpClient(_ClientHandler))
+            {
+                using (var response = await httpClient.GetAsync("http://localhost:5070/api/Destinations/" + destination.Id))
+                {
+                    string ApiResponse = await response.Content.ReadAsStringAsync();
+                    destination = JsonConvert.DeserializeObject<Destination>(ApiResponse);
+                }
+            }
             return View(destination);
         }
 
@@ -185,27 +202,17 @@ namespace SysMaTra.Controllers
             {
                 return Problem("Entity set 'SysMaTraContext.Destination'  is null.");
             }
-            Destination destination = new Destination();
-            HttpClient Client = _api.Initial();
-            HttpResponseMessage res = await Client.DeleteAsync("/Destinations" + destination.Id);
-
+            string message = " ";
+            using (var httpClient = new HttpClient(_ClientHandler))
+            {
+                using (var response = await httpClient.DeleteAsync("http://localhost:5070/api/Destinations/" + destination.Id))
+                {
+                    message = await response.Content.ReadAsStringAsync();
+                }
+            }
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<string> SaveFileAsync(IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-            {
-                return null;
-            }
-            var fileName = Path.GetFileName(file.FileName);
-            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads/Images", fileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-            return $"/uploads/Images/{fileName}";
-        }
         private bool DestinationExists(int id)
         {
           return _context.Destination.Any(e => e.Id == id);
